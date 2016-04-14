@@ -10416,7 +10416,7 @@ function Controller() {
     -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
     // this.apiPrefix = (this.environment === "development") ? "//10.0.18.192:8133/bzsm/" : "/" //api接口地址前缀   
     // this.apiPrefix = "/web_fe_rebuild" //api接口地址前缀   
-    this.apiPrefix="//10.0.18.78:8108";
+    this.apiPrefix = "//10.0.18.78:8108";
 
 
     /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -10444,9 +10444,10 @@ function Controller() {
             "querySellListOnMap": this.apiPrefix + "/houseMap/querySellListOnMap.rest", //
             "getStrokeGps": this.apiPrefix + "/houseMap/getStrokeGps.rest", //获取指定板块描边数据的数据
             "mapSearch": this.apiPrefix + "/houseMap/mapSearch.rest", //获取按指定筛选条件的房源数据
-            "searchByKeyword":this.apiPrefix+"/houseMap/searchByKeyword.rest", //按关键字搜索房源数据
-            "querySellListOnMapBySubWayLine":this.apiPrefix+"/houseMap/querySellListOnMapBySubWayLine.rest" ,//按城市id和地铁Id 获取房源数据
-            "getCitySubwayLines":this.apiPrefix+"/houseMap/getCitySubwayLines.rest", //获取城市地铁数据
+            "searchByKeyword": this.apiPrefix + "/houseMap/searchByKeyword.rest", //按关键字搜索房源数据
+            "querySellListOnMapBySubWayLine": this.apiPrefix + "/houseMap/querySellListOnMapBySubWayLine.rest", //按城市id和地铁Id 获取房源数据
+            "getCitySubwayLines": this.apiPrefix + "/houseMap/getCitySubwayLines.rest", //获取城市地铁数据
+            "searchKeywords": this.apiPrefix + "/houseMap/searchKeywords.rest", //获取匹配关键字的数据
         }
     };
 
@@ -10642,11 +10643,12 @@ function Controller() {
         var loadingTips = (params === null || params.loadingTips === null || params.loadingTips === undefined) ? "正在加载数据，请稍等..." : params.loadingTips;
         var apiDataType = (params === null || params.apiDataType === null || params.apiDataType === undefined) ? this.apiDataType : params.apiDataType;
         var onExceptionInterface = (params === null || params.onExceptionInterface === null || params.onExceptionInterface === undefined) ? null : params.onExceptionInterface;
+        var onErrorInterface = (params === null || params.onErrorInterface === null || params.onErrorInterface === undefined) ? null : params.onErrorInterface;
         var cache = (params === null || params.cache === null || params.cache === undefined) ? false : params.cache;
         var jsonpCallback = (params === null || params.jsonpCallback === null || params.jsonpCallback === undefined) ? null : params.jsonpCallback;
         if (this.showLoadingTips) this.tips(loadingTips);
         try {
-            $.ajax({
+            var ajaxObj = new $.ajax({
                 url: apiUrl,
                 type: type,
                 data: data,
@@ -10654,13 +10656,16 @@ function Controller() {
                 cache: cache,
                 error: function(e) {
                     classSelf.tips("调用数据接口失败！请测试您的数据接口！", 3);
+                    if (onErrorInterface) {
+                        onErrorInterface();
+                    }
                 },
                 success: function(data) {
                     $("#" + classSelf.tipsDialogId).modal("hide");
                     if (data && data.status.toString() === "1") {
                         if (process) process(data); //一切没有问题，就处理数据
                     } else {
-                        classSelf.tips(data.message, 3);
+                        //classSelf.tips(data.message, 3);
                         if (onExceptionInterface) onExceptionInterface(data.status, data.message);
                     }
                 }
@@ -10671,6 +10676,7 @@ function Controller() {
         /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
         整个try-catch块结束
         -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+        return ajaxObj;
     };
 
     /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------

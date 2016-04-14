@@ -4,7 +4,7 @@
  3. 作者：俞晓晨(yuxiaochen@lifang.com)
  4. 备注：
  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-require(['components/map/area', 'components/map/line'], function(areaFn, lineFn) {
+require(['components/map/area', 'components/map/line', 'components/map/pre'], function(areaFn, lineFn) {
     function IndexController() {
         /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
          相关全局属性定义
@@ -43,7 +43,7 @@ require(['components/map/area', 'components/map/line'], function(areaFn, lineFn)
     @lat:纬度
     @lon:经度
     -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    IndexController.prototype.init = function(lv, lat, lon) {
+    IndexController.prototype.init = function(lv, lon, lat) {
         var classSelf = this;
 
         //判断是否有传入坐标参数和层级参数进来，如有
@@ -58,6 +58,7 @@ require(['components/map/area', 'components/map/line'], function(areaFn, lineFn)
         }
 
         lv = classSelf.getLevel(lv);
+        console.log("init level:" + lv);
         var bs = classSelf.bounds();
 
         if (lv == classSelf.data.level && bs.minLon > classSelf.data.minLon && classSelf.data.maxLon > bs.maxLon && bs.minLat > classSelf.data.minLat &&
@@ -123,7 +124,7 @@ require(['components/map/area', 'components/map/line'], function(areaFn, lineFn)
                     return;
                 }
 
-                classSelf.tips(); //issues
+                //classSelf.tips(); //issues
                 classSelf.data = requestData; // 持久化data
 
                 for (var i = 0; i < housesRecords.length; i++) {
@@ -159,6 +160,13 @@ require(['components/map/area', 'components/map/line'], function(areaFn, lineFn)
 
     /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     百度地图Label添加事件绑定
+
+    1. 鼠标悬停 调用 setHover 绘制描边
+    2. 鼠标离开 移除页面所有的描边
+    3. 点击事件；a. lv===2(点击小区级别)，替换当前打点的class,并重新渲染房源列表
+                 b. lv<2,以当前点为中心，重新渲染地图；渲染改级别下的房源列表
+
+    参数定义：
     @lv:level
     @lon:经度
     @lat:纬度
@@ -221,7 +229,7 @@ require(['components/map/area', 'components/map/line'], function(areaFn, lineFn)
                     zIndex: 7
                 });
 
-                classSelf.setList(5, this.key, labelContent.replace(/^.*<i class=\"h\"\>([^<]*)<\/i>.*$/i, '$1'));
+                classSelf.setList(5 /*小区级别*/ , this.key, labelContent.replace(/^.*<i class=\"h\"\>([^<]*)<\/i>.*$/i, '$1'));
             } else {
                 debugger;
                 classSelf.setList(lv + 1, this.key);
@@ -590,7 +598,7 @@ require(['components/map/area', 'components/map/line'], function(areaFn, lineFn)
         classSelf.$order = $('<div id="Order"></div>').insertBefore(classSelf.$list);
 
         //添加显示小区名的title
-        classSelf.$order.html('<h3 class="Fl">' + sub + '</h3>');
+        classSelf.$order.html('<h3 class="Fl">' + communityName + '</h3>');
 
         //添加支持的排序类型
         var $sortTypeContainer = $('<p class="Fr"></p>');
@@ -599,7 +607,7 @@ require(['components/map/area', 'components/map/line'], function(areaFn, lineFn)
         $sortTypeContainer.append('<b class="order" data-value="3">面积<i>&uarr;</i></b>'); //面积排序
         $sortTypeContainer.append('<b class="order" data-value="5">最新<i>&uarr;</i></b>'); //最新排序
 
-        classSelf.$order.append($sortTypeContainer);
+        classSelf.$order.append($sortTypeContainer).show();
 
         //排序类型绑定点击事件
         classSelf.$order.find('>.Fr>b').on("click", function() {
@@ -855,6 +863,8 @@ require(['components/map/area', 'components/map/line'], function(areaFn, lineFn)
             var id = _this.attr('data-id');
             var lv = _this.attr('data-lv');
             var sid = _this.attr('data-sid');
+            var lat = _this.attr('data-lat');
+            var lon = _this.attr('data-lon');
 
             //如果没有地铁线路，直接return
             if (classSelf.$line.contents('.Dn').html() == '') return;
@@ -872,7 +882,7 @@ require(['components/map/area', 'components/map/line'], function(areaFn, lineFn)
                 if (lv && sid) {
                     classSelf.setList(4, id, sid);
                     classSelf.setSubway(id, sid);
-                    classSelf.init(16, l.attr('data-lon'), l.attr('data-lat'));
+                    classSelf.init(16, lon, lat);
                 } else {
                     classSelf.setList(3, id);
                     classSelf.setSubway(id);
