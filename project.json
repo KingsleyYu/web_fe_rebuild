@@ -1,0 +1,7 @@
+{
+    "cssPath": "css",
+    "lessPath": "less",
+    "manytooneConfig": [{}, {
+
+    }]
+}

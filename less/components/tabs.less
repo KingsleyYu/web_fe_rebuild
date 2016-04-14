@@ -1,0 +1,31 @@
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 1. 项目名称：悟空找房业务系统前端MVC框架
+ 2. 文件名称：tabs.less (标签页)
+ 3. 作者：zhaohuagang@lifang.com
+ -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+.tabs {
+    .tabs-handle {
+        border-bottom : 1px dotted @line-gray-color ;
+        .clearfix() ;
+        /*padding-left : @gap-dimension ;*/
+        &>li {            
+            float : left ;           
+            &>a {
+                color : @link-default-color ;
+                display : block ;
+                font-size : @tabs-handle-font-size ;
+                line-height : @tabs-handle-height ;
+                padding : 0 @gap-dimension ;
+                &:hover {
+                    color : @blue-color ;
+                }
+            }
+            &.on {
+                &>a {
+                    border-bottom : 2px solid @blue-color ;
+                    color : @blue-color ;
+                }                
+            }
+        }
+    }    
+}

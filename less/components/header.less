@@ -1,0 +1,490 @@
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 1. 项目名称：悟空Online前端MVC框架
+ 2. 文件名称：header.less (顶部蓝色条)
+ 3. 作者：yuxiaochen@lifang.com
+ -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+@lfcolor: #19BAFF;
+@lfcolor2: #FF8B00;
+@lfcolor3: #ff9e2a;
+.banner_top {
+    display: none;
+    width: 100%;
+    height: 75px;
+    background: url("../images/source/banner/banner_top.gif") no-repeat scroll center;
+    a {
+        display: block;
+        height: 75px;
+    }
+}
+
+
+//面包屑样式
+.breadCrumbs {
+    width: 1200px;
+    margin: 0 auto;
+    padding: 10px 0;
+    font-size: 12px;
+    line-height: 25px;
+    a,
+    span {
+        color: #B8B8B8;
+        margin-right: 3px;
+    }
+    a:hover {
+        cursor: pointer;
+        color: #4081D6;
+    }
+    a.active:hover {
+        color: #B8B8B8;
+        cursor: default;
+    }
+}
+
+
+/*公共头部样式开始*/
+
+.publicHead {
+    height: 74px;
+    border-bottom: 1px solid #e6e6e6;
+    width: 100%;
+    color: #717171;
+    font-size: 16px;
+    /*font-weight:bold;*/
+    font-family: "微软雅黑";
+    background-color: #ffffff;
+    /*定义宽度为1200主框架*/
+    .indexMainFrame {
+        width: 1200px;
+        margin: 0 auto;
+        position: relative;
+        /*logo，城市列表切换*/
+        #left {
+            float: left;
+            /*    width:300px;*/
+            .logo {
+                float: left;
+                margin-top: 17px;
+            }
+            .cityGetName {
+                float: left;
+                margin-left: 15px;
+                margin-top: 24px;
+                cursor: pointer;
+                position: relative;
+                height: 49px;
+                em {
+                    transition: color 0.3s ease-in-out;
+                    -webkit-transition: color 0.3s ease-in-out;
+                    -moz-transition: color 0.3s ease-in-out;
+                    -o-transition: color 0.3s ease-in-out;
+                    b {
+                        font-weight: normal;
+                    }
+                }
+                em:hover {
+                    color: #4183d7;
+                }
+                .headerSanJiao {
+                    font-size: 16px;
+                    /*display: inline-block;*/
+                    width: 25px;
+                    height: 25px;
+                    -webkit-transition: all 0.3s ease-in-out;
+                    -moz-transition: all 0.3s ease-in-out;
+                    -o-transition: all 0.3s ease-in-out;
+                    transition: all 0.3s ease-in-out;
+                    -webkit-transform: rotateZ(0deg);
+                    -moz-transform: rotateZ(0deg);
+                    -o-transform: rotateZ(0deg);
+                    transform: rotateZ(0deg);
+                }
+                .headerSanJiao_hover {
+                    -webkit-transform: rotateZ(180deg);
+                    -moz-transform: rotateZ(180deg);
+                    -o-transform: rotateZ(180deg);
+                    transform: rotateZ(180deg);
+                }
+                .cityList {
+                    width: 400px;
+                    position: absolute;
+                    z-index: 201;
+                    background-color: #ffffff;
+                    border: 1px solid #e4e4e4;
+                    top: 48px;
+                    left: -20px;
+                    font-size: 15px;
+                    cursor: default;
+                    display: none;
+                    .cityListFrame {
+                        //width:340px;
+                        padding: 0 30px;
+                        margin: 0 auto;
+                        overflow: hidden;
+                        /*区域选择*/
+                        .areaSelect {
+                            margin-left: 45px;
+                            height: 53px;
+                            line-height: 53px;
+                            position: relative;
+                            span {
+                                width: 124px;
+                                height: 24px;
+                                color: #999;
+                                font-weight: bold;
+                                text-align: center;
+                                line-height: 24px;
+                                display: inline-block;
+                                cursor: pointer;
+                                transition: color 0.3s ease-in-out;
+                                -webkit-transition: color 0.3s ease-in-out;
+                                -moz-transition: color 0.3s ease-in-out;
+                                -o-transition: color 0.3s ease-in-out;
+                            }
+                            #city_in {
+                                border-right: 1px solid #c9c9c9
+                            }
+                            #city_in.select {
+                                color: #4183d7;
+                            }
+                            #city_out.select {
+                                color: #4183d7;
+                            }
+                        }
+                        /*城市详细列表*/
+                        .cityDetail {
+                            position: relative;
+                            .cityModel {
+                                border-top: 1px solid #f1f1f1;
+                                padding: 15px 0;
+                                overflow: hidden;
+                                span {
+                                    font-weight: bold;
+                                }
+                                .cityTitle {
+                                    float: left;
+                                    display: inline;
+                                    margin-top: 3px;
+                                }
+                                .cityContent {
+                                    float: left;
+                                    margin-left: 15px;
+                                    width: 265px;
+                                    margin-top: 2px;
+                                    li {
+                                        float: left;
+                                        margin-left: 16px;
+                                        display: inline;
+                                        margin-bottom: 5px;
+                                        a {
+                                            color: #717171;
+                                            font-size: 14px;
+                                            transition: color 0.3s ease-in-out;
+                                            -webkit-transition: color 0.3s ease-in-out;
+                                            -moz-transition: color 0.3s ease-in-out;
+                                            -o-transition: color 0.3s ease-in-out;
+                                        }
+                                        a:hover {
+                                            color: #4183d7;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                /*.cityListShow
+        {
+          transition: all 0.3s;
+          -webkit-transition: all 0.3s;
+          -o-transition: all 0.3s;
+          -moz-transition: all 0.3s;
+          display:block;
+          opacity:1;
+          filter: alpha(opacity:100);
+        }*/
+            }
+        }
+        /*主导航列表*/
+        .headerR {
+            float: right;
+            overflow: hidden;
+        }
+        #middle {
+            margin-top: 27px;
+            overflow: hidden;
+            float: left;
+            margin-right: 30px;
+            .nav {
+                li {
+                    float: left;
+                    margin-left: 30px;
+                    display: inline;
+                    a {
+                        color: #717171;
+                        transition: color 0.3s ease-in-out;
+                        -webkit-transition: color 0.3s ease-in-out;
+                        -moz-transition: color 0.3s ease-in-out;
+                        -o-transition: color 0.3s ease-in-out;
+                    }
+                    a.blue {
+                        color: #4183d7;
+                        font-weight: bold;
+                    }
+                    a:hover {
+                        color: #4183d7;
+                    }
+                }
+            }
+        }
+        /*右侧login模块*/
+        #right {
+            overflow: hidden;
+            float: right;
+            a {
+                transition: color 0.3s ease-in-out;
+                -webkit-transition: color 0.3s ease-in-out;
+                -moz-transition: color 0.3s ease-in-out;
+                -o-transition: color 0.3s ease-in-out;
+                color: #4e4e4e;
+            }
+            a:hover {
+                color: #4183d7;
+            }
+            .wk_iconfont,
+            .iconfont {
+                float: left;
+                margin-top: 25px;
+                font-size: 30px;
+                cursor: auto;
+                color: #4183d7;
+                transition: color 0.3s ease-in-out;
+                -webkit-transition: color 0.3s ease-in-out;
+                -moz-transition: color 0.3s ease-in-out;
+                -o-transition: color 0.3s ease-in-out;
+            }
+            .loginStatus {
+                float: left;
+                font-size: 16px;
+                margin-top: 29px;
+                margin-left: 10px;
+                transition: color 0.3s ease-in-out;
+                -webkit-transition: color 0.3s ease-in-out;
+                -moz-transition: color 0.3s ease-in-out;
+                -o-transition: color 0.3s ease-in-out;
+                color: #4e4e4e;
+                cursor: pointer;
+                .quitButtonNei {
+                    color: #4183d7;
+                    font-size: 15px;
+                    transition: color 0.3s ease-in-out;
+                    -webkit-transition: color 0.3s ease-in-out;
+                    -moz-transition: color 0.3s ease-in-out;
+                    -o-transition: color 0.3s ease-in-out;
+                }
+                .quitButtonNei:hover {
+                    color: #DF0000;
+                }
+            }
+            .quitButton {
+                display: block;
+                color: #717171;
+                float: left;
+                margin-top: 28px;
+                font-size: 15px;
+                margin-left: 5px;
+                transition: color 0.3s ease-in-out;
+                -webkit-transition: color 0.3s ease-in-out;
+                -moz-transition: color 0.3s ease-in-out;
+                -o-transition: color 0.3s ease-in-out;
+            }
+            .quitButton:hover {
+                color: #DF0000;
+            }
+        }
+    }
+}
+
+button,
+.button {
+    background-color: @lfcolor2;
+}
+
+button:hover,
+.button:hover {
+    background-color: @lfcolor3;
+}
+
+.mbx {
+    margin-top: 20px;
+}
+
+
+/*弹窗背景层*/
+
+.loginBg {
+    background-color: #000000;
+    position: absolute;
+    z-index: 105;
+    left: 0;
+    top: 0;
+    width: 100%;
+    /*height:100%;这里不可以用他来定义高度，结果只能是铺满当前屏幕大小*/
+    opacity: 0;
+    filter: alpha(opacity=0);
+    /*兼容所有ie，因为ie不支持opacity*/
+}
+
+#out_login {
+    position: relative;
+    z-index: 100
+}
+
+.loginWindow {
+    input::-webkit-input-placeholder {
+        color: #e8e8e8 !important;
+    }
+    input:-moz-placeholder {
+        color: #4e4e4e !important;
+    }
+    input::-moz-placeholder {
+        color: #4e4e4e !important;
+    }
+    input:-ms-input-placeholder {
+        color: #4e4e4e !important;
+    }
+    color:#ffffff;
+    position: fixed;
+    z-index:106;
+    width:456px;
+    height:386px;
+    border-radius: 5px 5px;
+    background: url("../images/source/public/login_window_bg.png") no-repeat center;
+    display: none;
+    .closeLogin {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        margin-left: 410px;
+        cursor: pointer;
+        overflow: hidden;
+        color: #999999;
+    }
+    //密码校验输入框
+    .loginInput {
+        width: 332px;
+        height: 39px;
+        margin-left: auto;
+        margin-right: auto;
+        background: url("../images/source/public/login_input_bg.png") no-repeat center;
+        position: relative;
+        input {
+            color: #ffffff;
+            font-size: 16px;
+            margin-left: 10px;
+            background-color: transparent;
+            border: none;
+            box-shadow: none;
+            /*去掉public.css中默认的样式，否则会有阴影*/
+            margin-top: 3px;
+            height: 29px;
+            line-height: 29px;
+        }
+        .wrongTips {
+            position: absolute;
+            color: #b00a12;
+            font-size: 14px;
+            left: 10px;
+            top: 38px;
+        }
+        .placeHolderText {
+            width: 105px;
+            position: absolute;
+            font-size: 14px;
+            left: 20px;
+            top: 10px;
+            color: #e9ebed;
+        }
+    }
+    #loginSecurity {
+        margin-top: 20px;
+        display: none;
+    }
+    //图形验证码校验输入框
+    #loginSecurityImg {
+        margin-top: 20px;
+        .vertifyImg {
+            display: block;
+            float: right;
+            margin-right: 7%;
+            margin-top: 4px;
+            img {
+                width: 80px;
+                height: 30px;
+                cursor: pointer;
+            }
+        }
+        .checkinput {
+            display: block;
+            float: left;
+        }
+    }
+    //手机号输入框
+    #loginPhone {
+        margin-top: 155px;
+        span {
+            position: absolute;
+            right: 7%;
+            top: 24.3%;
+            font-size: 16px;
+            /*display: inline-block;*/
+            margin-left: 10px;
+            cursor: pointer;
+            -webkit-transition: all 0.3s;
+            -moz-transition: all 0.3s;
+            -o-transition: all 0.3s;
+            transition: all 0.3s;
+            display: none;
+            color: #ffffff;
+        }
+    }
+    //登录按钮
+    #loginButton {
+        width: 332px;
+        height: 39px;
+        border-radius: 18px 18px;
+        color: #ffffff;
+        font-size: 16px;
+        background-color: #4081d6;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        margin-top: 20px;
+        text-align: center;
+        line-height: 39px;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    #loginButton:hover {
+        background-color: #0b4999;
+    }
+    #loginButton.getHover {
+        background-color: #4081d6;
+    }
+    #loginButton.getHover:hover {
+        background-color: #0b4999;
+    }
+    //登录按钮
+}
+
+//搜索样式
+.c999 {
+    color: #999;
+}
+
+.ml5 {
+    margin-left: 5px;
+}

@@ -1,0 +1,755 @@
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 1. 项目名称：悟空Online前端MVC框架
+ 2. 文件名称：map/index.less
+ 3. 作者：yuxiaochen@lifang.com
+ -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+@import "../mixins.less";
+@import "../variables.less";
+
+body {
+	overflow: hidden;
+}
+
+.Fl, .Fr {
+	display: inline
+}
+.Fl {
+	float: left
+}
+.Fr {
+	float: right
+}
+.Cb {
+	clear: both
+}
+.Tc {
+	text-align: center
+}
+.Tr {
+	text-align: right
+}
+.Dib {
+	display: inline-block
+}
+.Dn {
+	display: none;
+}
+.Oh {
+	overflow: hidden
+}
+.Pa {
+	position: absolute
+}
+.Pr {
+	position: relative;
+}
+/*预搜索*/
+.Pre {
+	position: relative
+}
+.Pre>.Pa {
+	display: none;
+	background-color: #fff;
+	border: 1px solid #eee;
+	z-index: 83
+}
+.Pre>.Pa>i {
+	display: block;
+	line-height: 2em;
+	text-indent: 16px;
+	overflow: hidden;
+	cursor: pointer;
+}
+.Pre>.Pa>.act {
+	background-color: #4183d7;
+	color: #fff
+}
+
+/*下拉选择*/
+.Select {
+	.inline-block();
+	line-height: 2em;
+	text-indent: 1.5em;
+	position: relative;
+}
+.Select>dt {
+	height: 2em;
+	width: 100%;
+	cursor: default;
+}
+.Select .Selected {
+	float: left;
+	cursor: pointer;
+}
+.Select .Selected {
+	float: left;
+	cursor: pointer;
+}
+.Select .Selected.act{
+	color:#4183d7;
+}
+
+.Select .iconfont {
+	color: #ccc;
+	float: left;
+	text-indent: 0
+}
+.Select>.Dn {
+	width: 100%;
+	position: absolute;
+	z-index: 82;
+	top: 2em;
+	left: 0;
+	border: 1px solid #ddd;
+	border-top: 0;
+	padding-bottom: 4px;
+	border-radius: 0 0 4px 4px;
+	overflow: hidden;
+	background-color: #fff
+}
+
+.Select>.Dn>a, .Select>.Dn>i {
+	display: block;
+	cursor: pointer;
+	text-decoration: none;
+	white-space: nowrap;
+}
+.Select>.Dn>a.act, .Select>.Dn>i.act{
+	background-color: #4183d7;
+	color: #fff;
+}
+.Select>.Dn>a:hover, .Select>.Dn>i:hover {
+	background-color: #4183d7;
+	color: #fff!important;
+}
+.publicHead .indexMainFrame {
+	width: auto;
+	margin: 0 20px;
+}
+#Map {
+	width: 100%
+}
+#Tips {
+	position: absolute;
+	display: none;
+	top: 35%;
+	left: 50%;
+	margin-left: -40px;
+	z-index: 9;
+	padding: 15px 40px;
+	border-radius: 6px;
+	color: #666;
+	background-color: rgba(255,255,255,0.8);
+	background-color: #fff;
+}
+#Tips.loading {
+	font-size: 14px;
+	padding-left: 80px;
+	background-image: url(../images/source/map/loading.gif);
+	background-repeat: no-repeat;
+	background-position: 30px center;
+}
+.main, .main a, .main button, .main input {
+	color: #666;
+	font-size: 14px;
+}
+.main {
+	border-radius: 4px;
+	background: #fff;
+	position: absolute;
+	top: 85px;
+	left: 10px;
+	width: 400px;
+	z-index: 81;
+	box-shadow:0 1px 3px rgba(0,0,0,0.2)
+}
+.main>.Pre {
+	padding: 7px 0 5px;
+	height: 28px;
+}
+.main>.Pre>.Select {
+	width: 100px;
+	float: left;
+}
+.main>.Pre>.Select>.Dn {
+	top: 24px;
+}
+.main>.Pre>input {
+	border: none;
+	float: left;
+	width: 210px;
+	margin: 4px 0 0 1px;
+	border-radius: 0;
+	height: 16px;
+	line-height: 16px;
+	padding: 2px 6px 2px 20px;
+	border-left: 1px solid #ddd;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	outline: 0
+}
+.main>.Pre>input:focus {
+	background: transparent;
+}
+.main>.Pre>button {
+	float: right;
+	background-color: transparent;
+	color: #999;
+	width: 28px;
+	height: 28px;
+	line-height: 24px;
+	font-size: 18px;
+	margin: -2px 10px 0 0;
+	padding: 0;
+	cursor: pointer;
+	outline: 0
+}
+.main>.Pre>button:hover {
+	color: #4183d7
+}
+.main>.Pre>.Pa {
+	width: 298px;
+	top: 40px;
+	left: 101px;
+	border-radius: 0 0 4px 4px;
+	padding: 0 0 4px 0;
+}
+#Area, #Line {
+	float: left;
+	position: relative;
+	width: 200px;
+	background-color: #f5f5f5;
+	height: 40px;
+}
+#Area:hover, #Line:hover {
+	background-color: #fff
+}
+#Area>dt, #Line>dt {
+	text-indent: 5px;
+	margin: 4px 0 4px 40px;
+	height: 28px;
+	padding: 2px 0;
+	font-size: 14px;
+}
+#Area {
+	width: 199px;
+	border-right: 1px solid #fff;
+}
+#Area>.Dn, #Line>.Dn {
+	font-size: 12px;
+	top: 39px;
+	left: 0px;
+	border: 1px solid #f5f5f5;
+	overflow: visible;
+	border-radius: 0 0 0 4px;
+	padding-top: 4px;
+	z-index: 85
+}
+#Line>.Dn {
+	left: -2px;
+}
+#Area>.Dn>div, #Line>.Dn>div {
+	line-height: 26px;
+	height: 26px;
+	cursor: pointer;
+	white-space: nowrap;
+	clear: both;
+	text-indent: 0;
+	padding: 0 15px
+}
+#Area>.Dn>div:hover, #Line>.Dn>div:hover {
+	background-color: #4183d7;
+	color: #fff;
+}
+#Area>.Dn>div.act, #Line>.Dn>div.act {
+	background-color: #4183d7;
+	color: #fff;
+}
+#Area>.Dn>div:hover p, #Line>.Dn>div:hover p {
+	background-color: #fff;
+	color: #666;
+}
+#Area>.Dn>div b, #Line>.Dn>div b {
+	font-weight: normal;
+}
+#Area>.Dn>div>p, #Line>.Dn>div>p {
+	display: none;
+	position: absolute;
+	left: 199px;
+	top: -1px;
+	padding: 4px 0;
+	border: 1px solid #f5f5f5;
+	border-radius: 0 0 4px 0;
+	background: #fff;
+	text-indent: 10px;
+	width: 198px;
+	color: #666;
+	cursor: default;
+}
+#Line>.Dn>div>p {
+	left: 200px;
+	border-radius: 0 4px 4px 0;
+}
+#Area>.Dn>div>p>span, #Line>.Dn>div>p>i {
+	padding: 4px 6px 0 0;
+	clear: both;
+	height: 22px;
+	display: block;
+}
+#Area>.Dn>div>p i.act, #Line>.Dn>div>p i.act {
+	color: #4183d7
+}
+#Area>.Dn>div>p>span>b {
+	float: left;
+	height: 100%;
+	width: 16px;
+	line-height: 18px;
+}
+#Area>.Dn>div>p>span>i {
+	float: left;
+	white-space: nowrap;
+	height: 18px;
+	line-height: 18px;
+}
+#Area>.Dn>div>p i:hover, #Line>.Dn>div>p i:hover {
+	cursor: pointer;
+	color: #4183d7
+}
+#Line .Pr {
+	padding: 0 9px;
+	line-height: 15px;
+	margin-right: 5px;
+	overflow: hidden;
+}
+#Line .Pr>i {
+	position: absolute;
+	width: 17px;
+	text-align: center;
+	height: 17px;
+	line-height: 17px;
+	top: 0;
+	left: 0;
+	font-size: 12px;
+}
+#Line .Pr>.iconfont {
+	line-height: 16px;
+	font-size: 17px;
+}
+#Line>.Dn>div>p {
+	clear: both;
+}
+#Line>.Dn>div>p>span {
+	width: 128px;
+	height: 100%;
+	float: left
+}
+#Line>.Dn>div>p>span>i {
+	display: block;
+	padding-left: 6px;
+	margin-left: 8px;
+	background: url(../images/source/map/map.png) no-repeat -77px -20px;
+}
+#Line>.Dn>div>p>span>i:hover {
+	background-position: -77px -86px;
+}
+#Line>.Dn>div>p>span>.first {
+	background-position: -77px 7px;
+}
+#Line>.Dn>div>p>span>.first:hover {
+	background-position: -77px -67px;
+}
+#Line>.Dn>div>p>span>.last {
+	background-position: -77px -46px;
+}
+#Line>.Dn>div>p>span>.last:hover {
+	background-position: -77px -104px;
+}
+.main>.Select {
+	display: none;
+	font-size: 12px;
+	width: 108px;
+	padding: 6px 0;
+	float: left;
+}
+
+.main>.Select>dt>.iconfont {
+	font-size: 1em;
+}
+.main>.Select>.Dn {
+	top: 36px;
+}
+
+#Order{
+	height: 36px;
+	line-height: 36px;
+	display: none;
+	clear: both;
+	border-top: 1px solid #f1f1f1;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#Order>.Fl{
+	font-weight: normal;
+	color: #4081d6;
+	text-indent: 16px;
+	width:140px;
+	height: 36px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+#Order>.Fr{
+	margin-right: 4px;
+}
+#Order>.Fr>b{
+	cursor: pointer;
+	font-weight: normal;
+	margin-right: 12px;
+}
+#Order>.Fr>.act,#Order>.Fr>b:hover {
+	color: #4081d6
+}
+#Order>.Fr>b>i{
+	font-family: "Cambria";
+	margin-left: 2px;
+}
+
+
+#List {
+	display: none;
+	clear: both;
+	overflow-y: auto;
+	border-top: 1px solid #f1f1f1;
+	padding-bottom: 4px;
+}
+#List .err {
+	padding: 30px 10px 30px 20px;
+}
+#List .err>a {
+	color: #999;
+	margin-left: 6px
+}
+#List .err .iconfont {
+	vertical-align: bottom;
+	margin-right: 2px
+}
+#List .err>a:hover {
+	color: #4081d6;
+	text-decoration: none;
+}
+#List h3 {
+	font-weight: normal;
+	color: #4081d6;
+	height: 36px;
+	line-height: 36px;
+	text-indent: 16px
+}
+#List>dl {
+	clear: both;
+	height: 36px;
+	line-height: 35px;
+	border-top: 1px solid #f1f1f1;
+	cursor: pointer;
+	padding: 0 16px;
+	overflow: hidden;
+}
+#List>dl>dt {
+	float: left;
+}
+#List>dl>dd {
+	float: right
+}
+#List>dl:hover {
+	background: #f5f5f5;
+}
+#List>dl>dd>i {
+	font-family: \9ed1\4f53;
+	color: #999;
+	margin-left: 4px
+}
+#List ul {
+	clear: both;
+}
+#List li {
+	list-style: none;
+	display: block;
+	clear: both;
+}
+#List li>a {
+	padding: 10px 12px;
+	height: 70px;
+	border-top: 1px solid #f1f1f1;
+	display: block;
+	position: relative;
+	overflow: hidden;
+}
+
+
+#List li>a>.video {
+	position: absolute;
+	width: 38px;
+	height: 38px;
+	background: url(../images/source/map/map.png) no-repeat 0 -814px;
+	top: 26px;
+	left: 40px;
+}
+#List li>a>.sole, #List li>a>.top {
+	color: #fff;
+	position: absolute;
+	height: 18px;
+	line-height: 18px;
+	padding: 0 4px;
+	background: #eeb600;
+	font-size: 12px;
+	top: 10px;
+	left: 12px;
+}
+#List li>a>.top {
+	background: #3f7ccf;
+}
+#List li>a:hover {
+	background: #f5f5f5;
+	text-decoration: none;
+}
+
+#List li img {
+	width: 94px;
+	height: 70px;
+	float: left;
+}
+#List li span {
+	float: left;
+	padding-left: 10px;
+	width: 250px;
+}
+#List li em {
+	display: block;
+	color: #999;
+	padding: 5px 5px 5px 0;
+	font-size: 12px;
+	white-space: nowrap;
+	overflow: hidden;
+}
+#List li em>i {
+	border-left: 1px solid #999;
+	margin-left: 10px;
+	padding-left: 10px;
+	word-spacing: 5px;
+}
+#List li span>i {
+	border: 1px solid #999;
+	display: inline-block;
+	margin-left: 8px;
+	padding-left: 8px;
+	word-spacing: 4px;
+}
+#List li span>.m5, #List li span>.m2, #List li span>.sole, #List li span>.subway {
+	font-size: 12px;
+	border: 1px solid #4183d7;
+	color: #4183d7;
+	border-radius: 2px;
+	height: 18px;
+	line-height: 18px;
+	display: inline-block;
+	padding: 0 4px;
+	margin: 0 6px 0 0;
+	background: #fff;
+}
+#List li span>.m2 {
+	color: #5eb71f;
+	border-color: #5eb71f;
+}
+#List li span>.sole {
+	color: #f67c19;
+	border-color: #f67c19;
+}
+#List li span>.subway {
+	color: #eeba0f;
+	border-color: #eeba0f;
+}
+#List li a>.total {
+	font-size: 16px;
+	color: #4081d6;
+	position: absolute;
+	right: 16px;
+	bottom: 8px;
+}
+.lv0, .lv1, .lv2, .lv3, .remark {
+	font: 14px/22px Helvetica, 'Hiragino Sans GB', Arial, 'Microsoft YaHei', sans-serif;
+	color: #fff;
+	text-align: center;
+	background-repeat: no-repeat;
+}
+.lv0 {
+	background-image: url(../images/source/map/map.png);
+	padding: 16px 0 0;
+	width: 76px;
+	height: 60px;
+	margin: -38px 0 0 -38px;
+	cursor: pointer;
+}
+.lv0>i {
+	display: block;
+	font-size: 16px;
+}
+.over.lv0, .lv0:hover {
+	background-position: 0 -77px;
+}
+.lv1 {
+	margin: -26px 0 0 -26px;
+}
+.lv1>b {
+	cursor: pointer;
+	background: url(../images/source/map/map.png) 0 -154px;
+	display: block;
+	width: 51px;
+	height: 51px;
+	line-height: 51px;
+	margin: 0 12px 3px;
+}
+.over.lv1>b, .lv1:hover>b {
+	background-position: 0 -206px;
+}
+.lv1 i {
+	cursor: pointer;
+	background: url(../images/source/map/map.png) 0 -668px no-repeat;
+	display: inline-block;
+	font-size: 12px;
+	height: 18px;
+	line-height: 18px;
+	overflow: hidden;
+	vertical-align: middle;
+}
+.lv1 .l {
+	background-position: 0 -258px;
+	width: 10px;
+}
+.lv1 .r {
+	background-position: right -277px;
+	width: 10px;
+}
+.over.lv1 i, .lv1:hover i {
+	background-position: 0 -687px;
+}
+.over.lv1 .l, .lv1:hover .l {
+	background-position: 0 -297px;
+}
+.over.lv1 .r, .lv1:hover .r {
+	background-position: right -316px;
+}
+.lv2 {
+	cursor: pointer;
+	margin: -13px 0 0 -40px;
+	white-space: nowrap;
+	height: 26px;
+	position: absolute;
+	overflow: hidden;
+}
+.lv2>i {
+	background: url(../images/source/map/map.png) 0 -706px no-repeat;
+	display: inline-block;
+	font-size: 12px;
+	vertical-align: middle;
+	position: relative;
+	height: 100%;
+	line-height: 26px;
+}
+.lv2.vis>i {
+	background-position: 0 -760px;
+}
+.lv2>.l {
+	background-position: 0 -335px;
+	width: 12px;
+}
+.lv2.vis>.l {
+	background-position: 0 -443px;
+}
+.lv2>.r {
+	background-position: right -362px;
+	width: 12px;
+}
+.lv2.vis>.r {
+	background-position: right -470px;
+}
+.lv2>.h {
+	display: none;
+	color: #666;
+	margin-left: -11px;
+	z-index: -1;
+	position: relative;
+	padding: 0 0 0 15px;
+	background-position: 0 -787px;
+}
+.lv2>.v {
+	display: none;
+	width: 12px;
+}
+.over.lv2>i, .lv2:hover>i {
+	background-position: 0 -733px;
+	background-repeat: repeat;
+}
+.over.lv2>.l, .lv2:hover>.l {
+	background-position: 0 -389px;
+}
+.over.lv2>.r, .lv2:hover>.r {
+	background-position: right -416px;
+}
+.over.lv2>.h, .lv2:hover>.h {
+	display: inline-block;
+	background-position: 0 -787px;
+}
+.over.lv2>.v, .lv2:hover>.v {
+	display: inline-block;
+	background-position: right -497px;
+}
+.lv3 {
+	cursor: pointer;
+	margin: -13px 0 0 -26px;
+	height: 24px;
+	overflow: hidden;
+}
+.lv3>i {
+	background: url(../images/source/map/map.png) 0 -620px;
+	display: inline-block;
+	font-size: 12px;
+	vertical-align: middle;
+	color: #666;
+	height: 100%;
+	padding: 0 1px;
+	line-height: 24px;
+}
+.lv3>.l {
+	background-position: 0 -524px;
+	background-repeat: no-repeat;
+	width: 10px;
+}
+.lv3>.r {
+	background-position: right -548px;
+	background-repeat: no-repeat;
+	width: 10px;
+	margin-left: -1px;
+}
+.lv3.over>i, .lv3:hover>i {
+	color: #fff;
+	background-position: 0 -644px;
+}
+.lv3.over>.l, .lv3:hover>.l {
+	background-position: 0 -572px;
+}
+.lv3.over>.r, .lv3:hover>.r {
+	background-position: right -596px;
+}
+.remark {
+	margin: 8px 0 0 -18px;
+	font-size: 12px;
+	color: #ffa200;
+	border: 1px solid #ffa200;
+	border-radius: 5px;
+	height: 18px;
+	line-height: 18px;
+	padding: 0 10px;
+	background: #fff;
+}
