@@ -24,6 +24,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
         this.data = {}; //持久化所有与后台交互的参数
         this.subway = {}; //持久化已经渲染过的地铁线路数据
         this.hover = []; //持久化行政区域描边数据对象
+        this.begin = false; //全局开关，设置是否允许加载百度地图
 
         /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
          继承于Controller基类
@@ -98,7 +99,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
 
         classSelf.tips('正在加载房源...', 1);
 
-        //继承页面筛选条件
+        //继承售价，户型，面积，特色 4个筛选条件的值
         requestData = $.extend(requestData, classSelf.genSelect());
 
         //请求ajax 获取打点需要基础数据
@@ -239,7 +240,6 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
 
                 classSelf.setList(5 /*小区级别*/ , this.key, labelContent.replace(/^.*<i class=\"h\"\>([^<]*)<\/i>.*$/i, '$1'));
             } else {
-                debugger;
                 classSelf.setList(lv + 1, this.key);
                 classSelf.map.centerAndZoom(this.getPosition(), classSelf.level[lv + 1]);
 
@@ -382,7 +382,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
             return;
         }
 
-        //设置requestdata继承筛选条件
+        //设置requestdata继承售价，户型，面积，特色4个筛选条件
         requestData = $.extend(requestData, classSelf.genSelect());
 
         //是否有排序条件
@@ -589,6 +589,12 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
 
                     classSelf.setHeight();
                 }
+            },
+            onExceptionInterface: function() {
+                noDataFun();
+            },
+            onErrorInterface: function() {
+                noDataFun();
             }
         });
     }
@@ -915,10 +921,30 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
 
     /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     定义页面所有含有.Select 元素的点击事件处理逻辑
+    1. 区域找房 和 地铁找房 
+    2. 售价，户型，面积，特色 筛选条件
     -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
     IndexController.prototype.addListenerToSelect = function() {
         var classSelf = this;
 
+        //给每个Select 组件的选中头定义点击事件
+        classSelf.$selectLis.on("click", function() {
+            classSelf.data = {}; //清空与后台的交互数据
+            var lid = classSelf.$line.find('.Selected').attr('data-id');
+
+            //如果是存在选择地铁线路
+            if (lid) {
+                classSelf.setSubway(lid, classSelf.line.find('.Selected').attr('data-sid'));
+            }
+
+            //重新渲染房源数据列表
+            classSelf.setList();
+
+            //重新获取数据渲染地图
+            classSelf.init();
+        });
+
+        //定义鼠标悬停和离开事件
         classSelf.$selectLis.hover(function() {
             var _this = $(this);
             var $dn = _this.contents('.Dn');
@@ -930,7 +956,10 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
             var _this = $(this);
             var $dn = _this.contents('.Dn');
             $dn.hide(200);
-        }).find(".Dn>i").click(function(event) {
+        })
+
+        //定义Select 中下拉选项的点击事件
+        classSelf.$selectLis.find(".Dn>i").click(function(event) {
             var _this = $(this);
             var $dn = _this.parent();
             var $selectedTitle = $dn.siblings('dt').contents('.Selected');
@@ -941,7 +970,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                 $selectedTitle.attr('data-html', $selectedTitle.html());
             }
 
-            if (_this.attr('data-value') && _this.attr(data - value) != '0') {
+            if (_this.attr('data-value') && _this.attr('data-value') != '0') {
                 $selectedTitle.html(_this.html());
                 $selectedTitle.addClass('act');
             } else {
@@ -949,7 +978,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                 $selectedTitle.html($selectedTitle.attr('data-html'));
             }
 
-
+            //触发Select 选中头的点击
             $selectedTitle.attr('data-value', _this.attr('data-value')).click();
 
             $dn.hide();
