@@ -70,22 +70,6 @@ function Controller() {
     /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     系统各个模块API地址
     -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    // this.apiUrl = {
-    //     "houseMap": {
-    //         "getCityAreasInfo": this.apiPrefix + "houseMap/getCityAreasInfo.rest", //获取区域信息对应接口
-    //     }
-    // };
-
-
-    // this.apiUrl = {
-    //     "houseMap": {
-    //         "getCityAreasInfo": this.apiPrefix + "/data/getCityAreasInfo.json", //获取区域信息对应接口
-    //         "querySellListOnMap": this.apiPrefix + "/data/querySellListOnMap.json", //
-    //         "getStrokeGps": this.apiPrefix + "/data/getStrokeGps.json", //获取指定板块描边数据的数据
-    //         "mapSearch": this.apiPrefix + "/data/mapSearch.json" //获取按指定筛选条件的房源数据
-    //     }
-    // };
-
     this.apiUrl = {
         "houseMap": {
             "getCityAreasInfo": this.apiPrefix + "/houseMap/getCityAreasInfo.rest", //获取区域信息对应接口

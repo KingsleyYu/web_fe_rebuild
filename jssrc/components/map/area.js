@@ -43,6 +43,9 @@ define(function() {
         var $areaSumItem, $areaItem, $subAreaItem, $townItem;
         var listData = resp.data; //列表数据源
 
+        //清空
+        $areaListContainer.empty();
+        
         //设置总房源数
         $areaSumItem = $('<div><b class="Fl">全部</b><b class="Fr"></b></div>');
         $areaSumItem.find('b.Fr').html((resp.count || 0) + '套');
