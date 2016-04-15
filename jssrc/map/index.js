@@ -40,11 +40,11 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
 
     /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     地图初始化的方法
-    @lv:lv 可能的值只会为0,1,2 。把这个值当做数组level[12, 14, 17]的Index 获取数组对应的值
+    @zoomLv:地图缩放级别
     @lat:纬度
     @lon:经度
     -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    IndexController.prototype.init = function(lv, lon, lat) {
+    IndexController.prototype.init = function(zoomLv, lon, lat) {
         var classSelf = this;
 
         //判断是否有传入坐标参数和层级参数进来，如有
@@ -59,7 +59,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
         }
 
         //获取当前的显示级别
-        lv = classSelf.getLevel(lv);
+        var lv = classSelf.getLevel(zoomLv);
 
         //获取当前可视区域的屏幕坐标
         var bs = classSelf.bounds();
@@ -191,8 +191,8 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
             position: new BMap.Point(lon, lat)
         });
 
-        baiduLabel.key = key;
-        baiduLabel.count = count;
+        baiduLabel.key = key; //数据Id
+        baiduLabel.count = count; //房源数量
 
         baiduLabel.setStyle({
             border: 0,
@@ -298,6 +298,8 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                             enableClicking: false
                         });
                         classSelf.map.addOverlay(area.hover);
+
+                        //持久化当前的描边数据，避免同一区块重复请求数据描边
                         classSelf.hover.push(area.hover);
                     } else {
                         area.hover = false;
