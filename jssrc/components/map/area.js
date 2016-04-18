@@ -45,7 +45,7 @@ define(function() {
 
         //清空
         $areaListContainer.empty();
-        
+
         //设置总房源数
         $areaSumItem = $('<div><b class="Fl">全部</b><b class="Fr"></b></div>');
         $areaSumItem.find('b.Fr').html((resp.count || 0) + '套');
@@ -115,12 +115,12 @@ define(function() {
                 $townsContainer.hide();
             },
             click: function(e) {
+                console.log("area.js click");
                 var _this = $(this);
                 var $selectedTitle = _this.parent('.Dn').siblings('dt').contents('.Selected');
                 var tagName = (e.target || e.srcElement).tagName;
-
+                
                 $(this).addClass('act').siblings().removeClass('act');
-
                 if (tagName != 'B' && tagName != "DIV") {
                     return false;
                 }
@@ -139,7 +139,7 @@ define(function() {
                 }
 
                 $selectedTitle.attr({
-                    "data-id": _this.attr("data-id"),
+                    "data-id": _this.attr("data-id") || '',
                     "data-lv": 1,
                     "data-lat": _this.attr("data-lat") || '',
                     "data-lon": _this.attr("data-lon") || ''
