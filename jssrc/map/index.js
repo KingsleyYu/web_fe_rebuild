@@ -339,11 +339,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
         var classSelf = this;
 
         //请求数据
-        var requestData = {
-            'cityId': classSelf.$frm.attr('data-id'),
-            'houseType': classSelf.houseType,
-            'type': type
-        };
+        var requestData = {};
 
         //定义当没有数据时，页面交互函数
         var noDataFun = function() {
@@ -392,6 +388,13 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
             classSelf.setHeight();
             return;
         }
+
+
+        requestData = {
+            'cityId': classSelf.$frm.attr('data-id'),
+            'houseType': classSelf.houseType,
+            'type': type
+        };
 
         //设置requestdata继承售价，户型，面积，特色4个筛选条件
         requestData = $.extend(requestData, classSelf.genSelect());
@@ -950,7 +953,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
         var classSelf = this;
 
         //给每个Select 组件的选中头定义点击事件
-        classSelf.$selectLis.on("click", function() {
+        classSelf.$selectedTitleLis.on("click", function() {
             classSelf.data = {}; //清空与后台的交互数据
             var lid = classSelf.$line.find('.Selected').attr('data-id');
 
@@ -1004,6 +1007,8 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
             $selectedTitle.attr('data-value', _this.attr('data-value')).click();
 
             $dn.hide();
+
+            //return false;
         });
     }
 
