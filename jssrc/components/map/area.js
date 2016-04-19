@@ -163,7 +163,7 @@ define(function() {
                 $selectedTitle.attr("data-html", $selectedTitle.html() /*区域找房*/ );
             }
 
-            $selectedTitle.attr({
+            $selectedTitle.html(_this.html()).attr({
                 "data-id": _this.attr("data-id"),
                 "data-lv": 2,
                 "data-lat": _this.attr("data-lat") || '',
