@@ -115,7 +115,6 @@ define(function() {
                 $townsContainer.hide();
             },
             click: function(e) {
-                console.log("area.js click");
                 var _this = $(this);
                 var $selectedTitle = _this.parent('.Dn').siblings('dt').contents('.Selected');
                 var tagName = (e.target || e.srcElement).tagName;

@@ -57,21 +57,22 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
     IndexController.prototype.init = function(zoomLv, lon, lat) {
         var classSelf = this;
 
-        var bs = classSelf.bounds(); //获取当前可视区域的屏幕坐标
-
-        //判断是否有传入坐标参数和缩放级别，则以该坐标为中心点，并缩放到对应的级别,之后再重新渲染地图
+        //判断是否有传入坐标参数和层级参数进来，如有
         if (lon && lat) {
-            classSelf.begin = false;
-            zoomLv = zoomLv || classSelf.map.getZoom();
+            classSelf.begin = false; //
+            zoomLv=zoomLv||classSelf.map.getZoom();
             classSelf.map.centerAndZoom(new BMap.Point(lon, lat), zoomLv);
             setTimeout(function() {
-                classSelf.init();
+                classSelf.init()
             }, classSelf.time);
-
             return;
         }
 
-        var lv = this.getLevel(zoomLv); //根据缩放级别获取系统对应的级别
+        //获取当前的显示级别
+        var lv = classSelf.getLevel(zoomLv);
+
+        //获取当前可视区域的屏幕坐标
+        var bs = classSelf.bounds();
 
         //满足 1. 当前地图的显示级别==上次请求的显示级别
         //     2. 地图的拖动范围未超出在上次显示的区域的30%的范围
@@ -99,7 +100,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                         } else {
                             classSelf.map.removeOverlay(p[i]);
                             return;
-                        }
+                        };
                         break;
                     };
                 }
@@ -123,7 +124,6 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
 
                 //判断是否需要请求区域和地铁数据
                 if (cityId && cityId != classSelf.$frm.attr("data-id")) {
-                    //debugger;
                     classSelf.$city.text(resp.data.cityName);
                     classSelf.$frm.attr("data-id", cityId);
 
@@ -259,7 +259,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
     }
 
 
-    /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
        Label覆盖物鼠标移入绘制描边
 
        判断悬停区域是否保存对应的描边数据
@@ -271,17 +271,18 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
     --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
     IndexController.prototype.setHover = function(area) {
         var classSelf = this;
+
         if (area.hover == false) {
             return;
         } else if (area.hover) {
             classSelf.map.addOverlay(area.hover);
         } else {
-            var lv = classSelf.getLevel();
-            var grade = 4; /*默认grade 为行政区级别*/
+            var lv = classSelf.getLevel(),
+                grade = 4;
             if (lv == 2) {
-                grade = 6 /*小区级别*/ ;
+                grade = 6;
             } else if (lv == 1) {
-                grade = 5 /*区以下的道路级别*/ ;
+                grade = 5;
             }
 
             classSelf.request(classSelf.apiUrl.houseMap.getStrokeGps, {
@@ -307,10 +308,9 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                         });
                         classSelf.map.addOverlay(area.hover);
 
-                        //记录描边数据
+                        //持久化当前的描边数据，避免同一区块重复请求数据描边
                         classSelf.hover.push(area.hover);
                     } else {
-                        //设置该覆盖物没有对应的描边数据，避免重复请求
                         area.hover = false;
                     }
                 }
@@ -338,7 +338,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
     IndexController.prototype.setList = function(type, id, sub) {
         var classSelf = this;
 
-        //请求数据
+        //定义请求数据
         var requestData = {};
 
         //定义当没有数据时，页面交互函数
@@ -350,7 +350,6 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
 
         //显示筛选条件栏
         $('.main>.Select').show();
-
         if (type === 0) {
             noDataFun();
             return;
@@ -389,12 +388,9 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
             return;
         }
 
-
-        requestData = {
-            'cityId': classSelf.$frm.attr('data-id'),
-            'houseType': classSelf.houseType,
-            'type': type
-        };
+        requestData.cityId=classSelf.$frm.attr('data-id');
+        requestData.houseType=classSelf.houseType;
+        requestData.type=type;
 
         //设置requestdata继承售价，户型，面积，特色4个筛选条件
         requestData = $.extend(requestData, classSelf.genSelect());
@@ -709,14 +705,6 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                 anchor: BMAP_ANCHOR_BOTTOM_RIGHT
             }));
 
-            //设置Navigation平移按钮点击结束事件
-            classSelf.map.addEventListener("moveend", function() {                                
-                classSelf.begin = true;                
-                setTimeout(function() {                    
-                    classSelf.init();                
-                }, classSelf.time);            
-            });
-
             //设置百度地图缩放开始     
             classSelf.map.addEventListener('zoomstart', function() {
                 classSelf.begin = true
@@ -736,6 +724,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                     classSelf.init();
                 }, classSelf.time);
             });
+
             classSelf.init();
         });
 
@@ -806,7 +795,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                                 classSelf.init(classSelf.level[2], result.lon, result.lat);
                             } else {
                                 classSelf.setList(result.type, result.id);
-                                if (classSelf.type == 2 /*按道路或街道*/ ) {
+                                if (classSelf.type == 2) {
                                     classSelf.init(classSelf.level[2], result.lon, result.lat);
                                 } else {
                                     classSelf.init(classSelf.level[1], result.lon, result.lat);
@@ -850,13 +839,10 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
     -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
     IndexController.prototype.addListenerToAreaSelect = function() {
         var classSelf = this;
-
         classSelf.$area.find('.Selected').mousemove(function() {
             //隐藏表单autocomplete 内容
             classSelf.$frm.contents('.Pa').hide();
         }).unbind('click').click(function() {
-            console.log("addListenToArea click");
-
             var _this = $(this);
             var id = _this.attr("data-id");
             var lv = _this.attr("data-lv");
@@ -877,7 +863,6 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
 
             //隐藏下拉框
             _this.parent().siblings('.Dn').hide();
-
             return false;
         });
 
@@ -933,6 +918,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
 
             //隐藏下拉的地铁数据
             _this.parent().siblings('.Dn').hide();
+            return false;
         });
 
         //地铁选择组件添加rest方法
@@ -953,13 +939,13 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
         var classSelf = this;
 
         //给每个Select 组件的选中头定义点击事件
-        classSelf.$selectedTitleLis.on("click", function() {
+        classSelf.$selectLis.on("click", function() {
             classSelf.data = {}; //清空与后台的交互数据
             var lid = classSelf.$line.find('.Selected').attr('data-id');
 
             //如果是存在选择地铁线路
             if (lid) {
-                classSelf.setSubway(lid, classSelf.$line.find('.Selected').attr('data-sid'));
+                classSelf.setSubway(lid, classSelf.line.find('.Selected').attr('data-sid'));
             }
 
             //重新渲染房源数据列表
@@ -1007,8 +993,6 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
             $selectedTitle.attr('data-value', _this.attr('data-value')).click();
 
             $dn.hide();
-
-            //return false;
         });
     }
 
@@ -1022,7 +1006,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
     5. 循环遍历覆盖物集合，清除覆盖物(不包括地铁画圈circle和圈上的remark)，分两种情况
         a. 对于存在key和房源数量自定属性的覆盖物且地图缩放级别没有变化，如果覆盖物超出以当前可视区域放大
            一倍的可视区域，则可以删除该覆盖物
-        b. 对于不具有自定义属性的覆盖物或者缩放级别存在变化时，删除对应覆盖物(除由于关键字搜索没有结果生成的图标标注覆盖物)
+        b. 对于不具有自定义属性的覆盖物或者缩放级别存在变化(除由于关键字搜索没有结果生成的图标标注覆盖物)
             比如删除区域绘制的描边
             比如当缩放级别从区县级别切换到下一级别，需要将原先区县级别的打点全部清除
 
@@ -1075,15 +1059,15 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
     根据百度地图的缩放级别，获取系统对应的Level 值
     @zoomLevel，百度缩放级别
     -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    IndexController.prototype.getLevel = function(zoomLevel) {
+    IndexController.prototype.getLevel = function(lv) {
         var classSelf = this;
 
         //如果lv没有值，默认使用百度api获取当前地图的缩放级别
-        zoomLevel = zoomLevel || classSelf.map.getZoom();
+        lv = lv || classSelf.map.getZoom();
 
-        if (zoomLevel < classSelf.level[1]) {
+        if (lv < classSelf.level[1] /*14*/ ) {
             return 0;
-        } else if (zoomLevel < classSelf.level[2] /*17*/ - 1) {
+        } else if (lv < classSelf.level[2] /*17*/ - 1) {
             return 1;
         } else {
             return 2;
@@ -1136,7 +1120,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
     IndexController.prototype.setSubway = function(lineId, stationId) {
         var classSelf = this;
 
-        //classSelf.clear();
+        classSelf.clear();
 
         var requestData = {
             "cityId": classSelf.$frm.attr('data-id'),
