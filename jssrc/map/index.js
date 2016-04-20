@@ -21,6 +21,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
         this.time = 300; //设置定时请求接口的时间
         this.level = [12, 14, 17]; //定义百度地图显示level
         this.data = {}; //持久化所有与后台交互的参数
+        this.houseListData = {}; //持久化渲染房源列表的参数
         this.subway = {}; //持久化已经渲染过的地铁线路数据
         this.hover = []; //持久化行政区域描边数据对象
         this.begin = false; //全局开关，设置是否允许加载百度地图
@@ -69,8 +70,6 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
 
         //获取当前的显示级别
         var lv = classSelf.getLevel(zoomLv);
-
-        var pId = classSelf.$area.find('.Selected').attr('data-id');
 
         //获取当前可视区域的屏幕坐标
         var bs = classSelf.bounds();
@@ -178,7 +177,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                         }
 
                         //打点并给点绑定相关事件
-                        classSelf.setLabel(lv, houseRowData.lon, houseRowData.lat, labelContent, houseRowData.key, houseRowData.count, pId);
+                        classSelf.setLabel(lv, houseRowData.lon, houseRowData.lat, labelContent, houseRowData.key, houseRowData.count);
                     }
                 }
             }
@@ -201,7 +200,7 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
     @key:每个打点的key
     @count:打点显示的房源的数量
     -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    IndexController.prototype.setLabel = function(lv, lon, lat, content, key, count, pId) {
+    IndexController.prototype.setLabel = function(lv, lon, lat, content, key, count) {
         var classSelf = this;
 
         //定义百度Label
@@ -211,7 +210,6 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
 
         baiduLabel.key = key; //数据Id
         baiduLabel.count = count; //房源数量
-        baiduLabel.pId = pId;
 
         baiduLabel.setStyle({
             border: 0,
@@ -246,9 +244,10 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
         baiduLabel.addEventListener('click', function() {
             classSelf.begin = false; //设置不允许加载地图
 
+            var setListParam = {};
+
             if (lv === 2 /*小区级别*/ ) {
                 var labelContent = this.getContent();
-
                 //替换显示内容，加上 over vis css 类
                 this.setContent(labelContent.replace(/(class=\"lv\d)\"/i, '$1 over vis"'));
                 this.setStyle({
@@ -260,25 +259,8 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                 classSelf.setList(lv + 1, this.key);
                 classSelf.map.centerAndZoom(this.getPosition(), classSelf.level[lv + 1]);
 
-                //设置区域找房筛选条件的title
-                if (!this.pId || this.key != this.pId) {
-                    var $areaOptions = classSelf.$area.find("div[data-id='" + this.key + "']");
-                    var districtName = $areaOptions.find('b.Fl').html();
-
-                    $areaOptions.addClass('act');
-                    classSelf.$area.find('.Selected').html(districtName).addClass('act').attr({
-                        "data-lv": 1,
-                        "data-lon": $areaOptions.attr('data-lon') || '',
-                        "data-lat": $areaOptions.attr('data-lat') || '',
-                        "data-id": $areaOptions.attr('data-id')
-                    });
-                } else {
-                    console.log(this.pId);
-                }
-
                 //重新渲染地图
                 setTimeout(function() {
-                    debugger;
                     classSelf.init();
                 }, classSelf.time);
             }
@@ -358,9 +340,9 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
     5. 点击列表，根据data-x 参数执行init方法，重新渲染地图   
 
     参数定义：
-    @type:类型
-    @id:板块Id或地铁站id
-    @sub:小区名称或者地铁站Id
+    type:类型 可能值==> 1:按区县找房  2:按街道找房 3:按地铁线路 4:按地铁站 5:按小区
+    id:板块Id或地铁站id
+    sub:小区名称或者地铁站Id
     -----------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
     IndexController.prototype.setList = function(type, id, sub) {
         var classSelf = this;
@@ -426,6 +408,9 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
         if (classSelf.$list.attr('data-order')) {
             requestData.orderType = classSelf.$list.attr('data-order');
         }
+
+        classSelf.showSelectTitle(type, id, sub);
+
 
         //ajax 请求mapSearch.rest
         classSelf.request(this.apiUrl.houseMap.mapSearch, requestData, {
@@ -535,7 +520,11 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                     for (var i = 0; i < dataLis.length; i++) {
                         var tmpData = dataLis[i];
                         htmlTpl += '<dl data-id="' + tmpData.key + '" data-lon="' + tmpData.lon + '" data-lat="' + tmpData.lat + '"><dt>' + tmpData.value + '</dt><dd>' + tmpData.count + ' 套 <i>&gt;</i></dd></dl>';
-                    };
+                    }
+
+                    if (type == 1 /*按区县*/ ) {
+                        classSelf.houseListData = dataLis;
+                    }
 
                     classSelf.$list.html(htmlTpl).css('border-width', '1').show();
 
@@ -635,6 +624,62 @@ require(['components/map/area', 'components/map/line', 'components/map/pre'], fu
                 noDataFun();
             }
         });
+    }
+
+    /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    根据点击的打点的类型区分显示区域找房和地铁找房选择头
+    参数：
+    type:类型 可能值==> 1:按区县找房  2:按街道找房 3:按地铁线路 4:按地铁站 5:按小区
+    id:板块Id或地铁站id
+    sub:小区名称或者地铁站Id
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+    IndexController.prototype.showSelectTitle = function(type, id, sub) {
+        var classSelf = this;
+
+        var $seletedOption;
+        var displayName;
+
+        if (type == 1) {
+            $seletedOption = classSelf.$area.find("div[data-id='" + id + "']");
+            displayName = $seletedOption.find('b.Fl').html();
+
+            classSelf.$area.find(".Dn>div").removeClass('act');
+            $seletedOption.addClass('act');
+            classSelf.$area.find('.Selected').html(displayName).addClass('act').attr({
+                "data-lv": 1,
+                "data-lon": $seletedOption.attr('data-lon') || '',
+                "data-lat": $seletedOption.attr('data-lat') || '',
+                "data-id": $seletedOption.attr('data-id')
+            });
+        } else if (type == 2) {
+            var tmpOption;
+            if (classSelf.houseListData) {
+                for (var i = classSelf.houseListData.length - 1; i >= 0; i--) {
+                    if (classSelf.houseListData[i].key == id) {
+                        tmpOption = classSelf.houseListData[i];
+                    }
+                }
+            }
+
+            if (!tmpOption) {
+                return
+            }
+
+            displayName = tmpOption.value;
+
+            classSelf.$area.find(".Dn>div").removeClass('act');
+            classSelf.$area.find(".Dn>div>p").find('i').removeClass('act');
+
+            classSelf.$area.find(".Dn>div>p").find("i[data-id='" + id + "']")
+                .addClass('act').parents("div[data-id]").addClass('act');
+
+            classSelf.$area.find('.Selected').html(displayName).addClass('act').attr({
+                "data-lv": 2,
+                "data-lon": tmpOption.lon || '',
+                "data-lat": tmpOption.lat || '',
+                "data-id": tmpOption.key
+            });
+        }
     }
 
 
